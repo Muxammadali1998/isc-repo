@@ -1,0 +1,39 @@
+- name: nginx conf
+  hosts: my-servers
+  become: yes
+
+  vars:
+    domain_name: my-domain
+    web_root: /var/www/my-domain
+
+  tasks:
+    - name: install nginx
+      apt:
+        name: nginx
+        state: present
+        update_cache: yes
+
+    - name: ensure web root
+      file:
+        path: "{{ web_root }}"
+        state: directory
+
+    - name: cp nginx conf
+      template:
+        src: templates/nginx-conf.j2
+        dest: /etc/nginx/sites-available/{{ domain_name }}
+
+
+    - name: enable site
+      file:
+        src: /etc/nginx/sites-available/{{ domain_name }}
+        dest: /etc/nginx/sites-enabled/{{ domain_name }}
+        state: link
+        force: yes
+       
+
+  handlers:
+    - name: reload nginx
+      service:
+        name: nginx
+        state: reloaded

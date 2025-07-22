@@ -1,0 +1,17 @@
+- name: nginx conf
+  hosts: my-servers
+  become: yes
+
+  tasks:
+    - name: cp nginx conf
+      copy:
+        src: "./files/nginx.conf"
+        dest: /etc/nginx/nginx.conf
+        backup: yes
+      notify: reload nginx
+
+  handlers:
+    - name: reload nginx
+      service:
+        name: nginx
+        state: reloaded

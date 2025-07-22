@@ -1,0 +1,5 @@
+- name: deploy with rool
+  hosts: my-servers
+  become: yes
+  roles:
+    - nginx_site

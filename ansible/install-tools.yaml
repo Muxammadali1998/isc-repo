@@ -1,0 +1,15 @@
+- name: install tools
+  hosts: my-servers
+  become: yes
+
+  tasks:
+    - name: install packages
+      apt:
+        name: "{{ item }}"
+        state: present
+      loop:
+        - curl
+        - git
+        - htop
+        - net-tools
+        - unzip
